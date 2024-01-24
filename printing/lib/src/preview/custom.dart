@@ -299,6 +299,13 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         minScale: 1,
         maxScale: 5,
         child: GestureDetector(
+          onLongPressCancel: kIsWeb
+              ? () {
+                  setState(() {
+                    _mouseCursor = SystemMouseCursors.grab;
+                  });
+                }
+              : null,
           onLongPressEnd: kIsWeb
               ? (_) {
                   setState(() {
