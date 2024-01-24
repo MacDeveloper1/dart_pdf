@@ -245,7 +245,7 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
               preview = index;
               transformationController.value.setIdentity();
               if (kIsWeb) {
-                _mouseCursor = SystemMouseCursors.grab;
+                _updateCursor(SystemMouseCursors.grab);
               }
             });
             _zoomChanged();
@@ -289,7 +289,7 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         setState(() {
           preview = null;
           if (kIsWeb) {
-            _mouseCursor = MouseCursor.defer;
+            _updateCursor(MouseCursor.defer);
           }
         });
         _zoomChanged();
@@ -298,28 +298,13 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         transformationController: transformationController,
         minScale: 1,
         maxScale: 5,
-        onInteractionEnd: kIsWeb
-            ? (_) {
-                setState(() {
-                  _mouseCursor = SystemMouseCursors.grab;
-                });
-              }
-            : null,
+        onInteractionEnd:
+            kIsWeb ? (_) => _updateCursor(SystemMouseCursors.grab) : null,
         child: GestureDetector(
-          onLongPressCancel: kIsWeb
-              ? () {
-                  setState(() {
-                    _mouseCursor = SystemMouseCursors.grab;
-                  });
-                }
-              : null,
-          onLongPressDown: kIsWeb
-              ? (_) {
-                  setState(() {
-                    _mouseCursor = SystemMouseCursors.grabbing;
-                  });
-                }
-              : null,
+          onLongPressCancel:
+              kIsWeb ? () => _updateCursor(SystemMouseCursors.grab) : null,
+          onLongPressDown:
+              kIsWeb ? (_) => _updateCursor(SystemMouseCursors.grabbing) : null,
           child: Center(
             child: PdfPreviewPage(
               pageData: pages[preview!],
@@ -332,16 +317,8 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
     );
     return kIsWeb
         ? MouseRegion(
-            onEnter: (event) {
-              setState(() {
-                _mouseCursor = SystemMouseCursors.grab;
-              });
-            },
-            onExit: (event) {
-              setState(() {
-                _mouseCursor = MouseCursor.defer;
-              });
-            },
+            onEnter: (_) => _updateCursor(SystemMouseCursors.grab),
+            onExit: (_) => _updateCursor(MouseCursor.defer),
             cursor: _mouseCursor,
             child: zoomPreview,
           )
@@ -349,6 +326,14 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
   }
 
   void _zoomChanged() => widget.onZoomChanged?.call(preview != null);
+
+  void _updateCursor(MouseCursor mouseCursor) {
+    if (mouseCursor != _mouseCursor) {
+      setState(() {
+        _mouseCursor = mouseCursor;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
