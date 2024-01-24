@@ -298,18 +298,25 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         transformationController: transformationController,
         minScale: 1,
         maxScale: 5,
+        // onInteractionEnd: kIsWeb
+        //     ? (details) {
+        //         setState(() {
+        //           _mouseCursor = SystemMouseCursors.grab;
+        //         });
+        //       }
+        //     : null,
         child: GestureDetector(
-          onLongPressCancel: kIsWeb
-              ? () {
-                  Timer.run(
-                    () {
-                      setState(() {
-                        _mouseCursor = SystemMouseCursors.grab;
-                      });
-                    },
-                  );
-                }
-              : null,
+          // onLongPressCancel: kIsWeb
+          //     ? () {
+          //         Timer.run(
+          //           () {
+          //             setState(() {
+          //               _mouseCursor = SystemMouseCursors.grab;
+          //             });
+          //           },
+          //         );
+          //       }
+          //     : null,
           onLongPressEnd: kIsWeb
               ? (_) {
                   Timer.run(
