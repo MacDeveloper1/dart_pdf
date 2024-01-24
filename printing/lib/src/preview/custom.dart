@@ -314,8 +314,8 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
     );
     return kIsWeb
         ? MouseRegion(
-            onEnter: (_) => _updateCursor(SystemMouseCursors.grab),
-            onExit: (_) => _updateCursor(MouseCursor.defer),
+            // onEnter: (_) => _updateCursor(SystemMouseCursors.grab),
+            // onExit: (_) => _updateCursor(MouseCursor.defer),
             cursor: _mouseCursor,
             child: zoomPreview,
           )
