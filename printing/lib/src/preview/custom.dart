@@ -285,20 +285,6 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
 
   Widget _zoomPreview() {
     final zoomPreview = GestureDetector(
-      onTapDown: kIsWeb
-          ? (_) {
-              setState(() {
-                _mouseCursor = SystemMouseCursors.grabbing;
-              });
-            }
-          : null,
-      onTapUp: kIsWeb
-          ? (_) {
-              setState(() {
-                _mouseCursor = SystemMouseCursors.grab;
-              });
-            }
-          : null,
       onDoubleTap: () {
         setState(() {
           preview = null;
@@ -310,12 +296,29 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
       },
       child: InteractiveViewer(
         transformationController: transformationController,
+        minScale: 1,
         maxScale: 5,
-        child: Center(
-          child: PdfPreviewPage(
-            pageData: pages[preview!],
-            pdfPreviewPageDecoration: widget.pdfPreviewPageDecoration,
-            pageMargin: widget.previewPageMargin,
+        child: GestureDetector(
+          onLongPressDown: kIsWeb
+              ? (_) {
+                  setState(() {
+                    _mouseCursor = SystemMouseCursors.grabbing;
+                  });
+                }
+              : null,
+          onLongPressUp: kIsWeb
+              ? () {
+                  setState(() {
+                    _mouseCursor = SystemMouseCursors.grab;
+                  });
+                }
+              : null,
+          child: Center(
+            child: PdfPreviewPage(
+              pageData: pages[preview!],
+              pdfPreviewPageDecoration: widget.pdfPreviewPageDecoration,
+              pageMargin: widget.previewPageMargin,
+            ),
           ),
         ),
       ),
