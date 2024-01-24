@@ -306,8 +306,15 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         //       }
         //     : null,
         child: GestureDetector(
-          // onLongPressCancel: kIsWeb
-          //     ? () {
+          onLongPressCancel: kIsWeb
+              ? () {
+                  setState(() {
+                    _mouseCursor = SystemMouseCursors.grab;
+                  });
+                }
+              : null,
+          // onLongPressEnd: kIsWeb
+          //     ? (_) {
           //         Timer.run(
           //           () {
           //             setState(() {
@@ -317,17 +324,6 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
           //         );
           //       }
           //     : null,
-          onLongPressEnd: kIsWeb
-              ? (_) {
-                  Timer.run(
-                    () {
-                      setState(() {
-                        _mouseCursor = SystemMouseCursors.grab;
-                      });
-                    },
-                  );
-                }
-              : null,
           onLongPressDown: kIsWeb
               ? (_) {
                   setState(() {
