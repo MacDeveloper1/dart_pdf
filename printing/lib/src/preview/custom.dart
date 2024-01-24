@@ -301,29 +301,30 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         child: GestureDetector(
           onLongPressCancel: kIsWeb
               ? () {
-                  setState(() {
-                    _mouseCursor = SystemMouseCursors.grab;
-                  });
+                  Timer.run(
+                    () {
+                      setState(() {
+                        _mouseCursor = SystemMouseCursors.grab;
+                      });
+                    },
+                  );
                 }
               : null,
           onLongPressEnd: kIsWeb
               ? (_) {
-                  setState(() {
-                    _mouseCursor = SystemMouseCursors.grab;
-                  });
+                  Timer.run(
+                    () {
+                      setState(() {
+                        _mouseCursor = SystemMouseCursors.grab;
+                      });
+                    },
+                  );
                 }
               : null,
           onLongPressDown: kIsWeb
               ? (_) {
                   setState(() {
                     _mouseCursor = SystemMouseCursors.grabbing;
-                  });
-                }
-              : null,
-          onLongPressUp: kIsWeb
-              ? () {
-                  setState(() {
-                    _mouseCursor = SystemMouseCursors.grab;
                   });
                 }
               : null,
@@ -338,7 +339,20 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
       ),
     );
     return kIsWeb
-        ? MouseRegion(cursor: _mouseCursor, child: zoomPreview)
+        ? MouseRegion(
+            onEnter: (event) {
+              setState(() {
+                _mouseCursor = SystemMouseCursors.grab;
+              });
+            },
+            onExit: (event) {
+              setState(() {
+                _mouseCursor = MouseCursor.defer;
+              });
+            },
+            cursor: _mouseCursor,
+            child: zoomPreview,
+          )
         : zoomPreview;
   }
 
