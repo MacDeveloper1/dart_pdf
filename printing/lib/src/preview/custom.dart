@@ -294,23 +294,20 @@ class PdfPreviewCustomState extends State<PdfPreviewCustom>
         });
         _zoomChanged();
       },
+      onLongPressCancel:
+          kIsWeb ? () => _updateCursor(SystemMouseCursors.grab) : null,
+      onLongPressDown:
+          kIsWeb ? (_) => _updateCursor(SystemMouseCursors.grabbing) : null,
       child: InteractiveViewer(
         transformationController: transformationController,
-        minScale: 1,
         maxScale: 5,
         onInteractionEnd:
             kIsWeb ? (_) => _updateCursor(SystemMouseCursors.grab) : null,
-        child: GestureDetector(
-          onLongPressCancel:
-              kIsWeb ? () => _updateCursor(SystemMouseCursors.grab) : null,
-          onLongPressDown:
-              kIsWeb ? (_) => _updateCursor(SystemMouseCursors.grabbing) : null,
-          child: Center(
-            child: PdfPreviewPage(
-              pageData: pages[preview!],
-              pdfPreviewPageDecoration: widget.pdfPreviewPageDecoration,
-              pageMargin: widget.previewPageMargin,
-            ),
+        child: Center(
+          child: PdfPreviewPage(
+            pageData: pages[preview!],
+            pdfPreviewPageDecoration: widget.pdfPreviewPageDecoration,
+            pageMargin: widget.previewPageMargin,
           ),
         ),
       ),
